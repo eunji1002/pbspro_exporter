@@ -25,7 +25,7 @@ import (
 	promlog "github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
 	//"github.com/prometheus/common/version"
-	nc "github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	//"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/alecthomas/kingpin"
@@ -111,7 +111,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 	
 	r := prometheus.NewRegistry()
-	r.MustRegister(nc.NewCollector("pbspro_exporter"))
+	r.MustRegister(version.NewCollector("pbspro_exporter"))
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register pbspro collector: %s", err)
 	}
