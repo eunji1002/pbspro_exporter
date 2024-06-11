@@ -21,9 +21,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	//"github.com/prometheus/common/promlog"
-	log "github.com/sirupsen/logrus"
-	log_common "github.com/prometheus/common/log"
+	"github.com/prometheus/common/promlog"
+	logrus "github.com/sirupsen/logrus"
 	version_export "github.com/prometheus/client_golang/prometheus/collectors/version"
 	version "github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
@@ -65,7 +64,7 @@ func newHandler(includeExporterMetrics bool, maxRequests int) *handler {
 // ServeHTTP implements http.Handler.
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	filters := r.URL.Query()["collect[]"]
-	log.Debugln("collect query:", filters)
+	logrus.Debugln("collect query:", filters)
 
 	if len(filters) == 0 {
 		// No filters, use the prepared unfiltered handler.
@@ -75,7 +74,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// To serve filtered metrics, we create a filtering handler on the fly.
 	filteredHandler, err := h.innerHandler(filters...)
 	if err != nil {
-		log.Warnln("Couldn't create filtered metrics handler:", err)
+		logrus.Warnln("Couldn't create filtered metrics handler:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(fmt.Sprintf("Couldn't create filtered metrics handler: %s", err)))
 		return
@@ -97,14 +96,14 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	// Only log the creation of an unfiltered handler, which should happen
 	// only once upon startup.
 	if len(filters) == 0 {
-		log.Infof("Enabled collectors:")
+		logrus.Infof("Enabled collectors:")
 		collectors := []string{}
 		for n := range nc.Collectors {
 			collectors = append(collectors, n)
 		}
 		sort.Strings(collectors)
 		for _, n := range collectors {
-			log.Infof(" - %s", n)
+			logrus.Infof(" - %s", n)
 		}
 	}
 
@@ -116,7 +115,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            log_common.NewErrorLogger(),
+			ErrorLog:            logrus.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
@@ -156,8 +155,8 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	log.Infoln("Starting pbspro_exporter", version.Info())
-	log.Infoln("Build context", version.BuildContext())
+	logrus.Infoln("Starting pbspro_exporter", version.Info())
+	logrus.Infoln("Build context", version.BuildContext())
 
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *maxRequests))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -170,7 +169,7 @@ func main() {
 			</html>`))
 	})
 
-	log.Infoln("Listening on", *listenAddress)
+	logrus.Infoln("Listening on", *listenAddress)
 	if err := http.ListenAndServe(*listenAddress, nil); err != nil {
 		log.Fatal(err)
 	}
