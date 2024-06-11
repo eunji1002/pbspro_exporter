@@ -24,7 +24,8 @@ import (
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
 	promlog "github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
-	"github.com/prometheus/common/version"
+	version1 "github.com/prometheus/common/version"
+	version2 "github.com/prometheus/client_golang/prometheus/collectors/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	//"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/alecthomas/kingpin"
@@ -110,7 +111,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 	
 	r := prometheus.NewRegistry()
-	r.MustRegister(prometheus/version.NewCollector("pbspro_exporter"))
+	r.MustRegister(version2.NewCollector("pbspro_exporter"))
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register pbspro collector: %s", err)
 	}
@@ -155,12 +156,12 @@ func main() {
 	logConfig := &promlog.Config{}
 	
 	flaglog.AddFlags(kingpin.CommandLine, logConfig)
-	kingpin.Version(version.Print("pbspro_exporter"))
+	kingpin.Version(version1.Print("pbspro_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	log.Infoln("Starting pbspro_exporter", version.Info())
-	log.Infoln("Build context", version.BuildContext())
+	log.Infoln("Starting pbspro_exporter", version1.Info())
+	log.Infoln("Build context", version1.BuildContext())
 
 	http.Handle(*metricsPath, newHandler(!*disableExporterMetrics, *maxRequests))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
