@@ -108,6 +108,8 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 		}
 	}
 
+	logConfig := &promlog.Config{}
+	
 	r := prometheus.NewRegistry()
 	r.MustRegister(version.NewCollector("pbspro_exporter"))
 	if err := r.Register(nc); err != nil {
@@ -116,7 +118,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            promlog.New(),
+			ErrorLog:            promlog.New(logConfig),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
