@@ -2,13 +2,13 @@ package collector
 
 import (
 	"github.com/siddontang/go/log"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 import (
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	log "github.com/prometheus/common/promlog"
+	"github.com/prometheus/common/promlog"
 	"github.com/eunji1002/go_pbs/qstat"
 )
 
