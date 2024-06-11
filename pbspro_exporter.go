@@ -50,7 +50,7 @@ func newHandler(includeExporterMetrics bool, maxRequests int) *handler {
 	}
 	if h.includeExporterMetrics {
 		h.exporterMetricsRegistry.MustRegister(
-			//prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
+			prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
 			prometheus.NewGoCollector(),
 		)
 	}
