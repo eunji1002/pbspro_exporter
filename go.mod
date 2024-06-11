@@ -10,7 +10,7 @@ require (
 	github.com/prometheus/common v0.0.0-20181126121408-4724e9255275
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/sirupsen/logrus v1.2.0 // indirect
-	github.com/eunji1002/go_pbs v0.0.0-20190131084730-756d5a9273fb
+	github.com/eunji1002/go_pbs 756d5a9273fb
 	golang.org/x/sync v0.0.0-20181221193216-37e7f081c4d4 // indirect
 	golang.org/x/sys v0.0.0-20181221143128-b4a75ba826a6 // indirect
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
