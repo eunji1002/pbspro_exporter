@@ -18,7 +18,8 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"sort"
-
+	
+	"github.com/sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/promlog"
