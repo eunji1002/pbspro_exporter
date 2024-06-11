@@ -27,7 +27,7 @@ import (
 	"github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	"gopkg.in/alecthomas/kingpin.v2"
-	kingpin "github.com/alecthomas/kingpin"
+	"github.com/alecthomas/kingpin"
 )
 
 // handler wraps an unfiltered http.Handler but uses a filtered handler,
