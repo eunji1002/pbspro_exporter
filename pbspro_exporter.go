@@ -22,7 +22,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	promlog"github.com/prometheus/common/promlog"
+	promlog "github.com/prometheus/common/promlog"
+	flaglog "github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -114,7 +115,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            promlog.NewErrorLogger(),
+			ErrorLog:            log.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
@@ -149,7 +150,7 @@ func main() {
 		).Default("40").Int()
 	)
 
-	promlog.AddFlags(kingpin.CommandLine)
+	flaglog.AddFlags(kingpin.CommandLine)
 	kingpin.Version(version.Print("pbspro_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
