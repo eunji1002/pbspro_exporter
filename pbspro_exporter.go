@@ -107,7 +107,17 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	}
 
 	r := prometheus.NewRegistry()
-	r.MustRegister(version.Info("pbspro_exporter"))
+	r.MustRegister(version.Print("pbspro_exporter"))
+	versionMetric := prometheus.NewGaugeVec(
+    	    prometheus.GaugeOpts{
+                Name: "pbspro_exporter_build_info",
+                Help: "A metric with a constant '1' value labeled by version, revision, branch, and goversion from which pbspro_exporter was built.",
+    	    },
+    	    []string{"version", "revision", "branch", "goversion"},
+)
+	versionMetric.WithLabelValues(versionInfo).Set(1)
+	r.MustRegister(versionMetric)
+	
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register pbspro collector: %s", err)
 	}
