@@ -23,7 +23,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/prometheus/common/promlog"
 	log "github.com/sirupsen/logrus"
-	"github.com/prometheus/common/version"
+	version "github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
