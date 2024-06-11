@@ -1,8 +1,7 @@
 package collector
 
 import (
-	"log"
-
+	log "github.com/siddontang/go/log"
 	"github.com/sirupsen/logrus"
 )
 import (
