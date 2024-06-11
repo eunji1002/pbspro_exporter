@@ -108,7 +108,6 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 		}
 	}
 
-	logConfig := &promlog.Config{}
 	
 	r := prometheus.NewRegistry()
 	r.MustRegister(version.NewCollector("pbspro_exporter"))
