@@ -21,7 +21,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/common/promlog"
+	log "github.com/prometheus/common/promlog"
 	logrus "github.com/sirupsen/logrus"
 	version_export "github.com/prometheus/client_golang/prometheus/collectors/version"
 	version "github.com/prometheus/common/version"
@@ -115,7 +115,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            logrus.NewErrorLogger(),
+			ErrorLog:            log.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
