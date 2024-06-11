@@ -25,7 +25,7 @@ import (
 	promlog "github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
 	//"github.com/prometheus/common/version"
-	nc "github.com/prometheus/client_golang/prometheus/collectors/version"
+	nc "github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/eunji1002/pbspro_exporter/collector"
 	//"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/alecthomas/kingpin"
