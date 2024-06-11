@@ -15,7 +15,6 @@ package main
 
 import (
 	"fmt"
-	log_origin "log"
 	"net/http"
 	_ "net/http/pprof"
 	"sort"
@@ -24,6 +23,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/prometheus/common/promlog"
 	log "github.com/sirupsen/logrus"
+	log_common "github.com/prometheus/common/log"
 	version_export "github.com/prometheus/client_golang/prometheus/collectors/version"
 	version "github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
@@ -116,7 +116,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            log_origin.NewErrorLogger(),
+			ErrorLog:            log_common.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
