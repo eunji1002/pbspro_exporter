@@ -20,7 +20,7 @@ import (
 	"sort"
 	
 	log "github.com/sirupsen/logrus"
-	"github.com/prometheus/client_golang/prometheus"
+	pro "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
 	promlog "github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
