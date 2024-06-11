@@ -1,7 +1,10 @@
 package collector
 
-import "log"
+import (
+	"log"
 
+	"github.com/sirupsen/logrus"
+)
 import (
 	"strings"
 
