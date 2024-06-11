@@ -110,7 +110,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 	
 	r := prometheus.NewRegistry()
-	r.MustRegister(github.com/prometheus/client_golang/prometheus/collectors/version.NewCollector("pbspro_exporter"))
+	r.MustRegister(prometheus/version.NewCollector("pbspro_exporter"))
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register pbspro collector: %s", err)
 	}
