@@ -1,5 +1,7 @@
 package collector
 
+import "log"
+
 import (
 	"strings"
 
