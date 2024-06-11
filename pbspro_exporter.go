@@ -151,7 +151,7 @@ func main() {
 		).Default("40").Int()
 	)
 
-	flaglog.AddFlags(kingpin.CommandLine)
+	flaglog.AddFlags(kingpin.CommandLine, logConfig)
 	kingpin.Version(version.Print("pbspro_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
