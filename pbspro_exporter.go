@@ -15,6 +15,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"sort"
@@ -22,7 +23,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	//"github.com/prometheus/common/promlog"
-	log "github.com/sirupsen/logrus"
+	logrus "github.com/sirupsen/logrus"
 	version_export "github.com/prometheus/client_golang/prometheus/collectors/version"
 	version "github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
@@ -150,7 +151,7 @@ func main() {
 		).Default("40").Int()
 	)
 
-	log.AddFlags(kingpin.CommandLine)
+	// log.AddFlags(kingpin.CommandLine)
 	kingpin.Version(version.Print("pbspro_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
