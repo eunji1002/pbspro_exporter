@@ -18,14 +18,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"sort"
-
-	"bytes"
-	"fmt"
-	"runtime"
-	"runtime/debug"
-	"strings"
-	"text/template"
-
+	
 	log "github.com/sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
