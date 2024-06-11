@@ -20,7 +20,7 @@ import (
 	"sort"
 	
 	log "github.com/sirupsen/logrus"
-	pro "github.com/prometheus/client_golang/prometheus"
+	ej "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
 	promlog "github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
@@ -116,7 +116,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            pro.NewErrorLogger(),
+			ErrorLog:            ej.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
