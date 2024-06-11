@@ -118,7 +118,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 	handler := promhttp.HandlerFor(
 		prometheus.Gatherers{h.exporterMetricsRegistry, r},
 		promhttp.HandlerOpts{
-			ErrorLog:            ej.NewErrorLogger(),
+			ErrorLog:            yj.NewErrorLogger(),
 			ErrorHandling:       promhttp.ContinueOnError,
 			MaxRequestsInFlight: h.maxRequests,
 		},
