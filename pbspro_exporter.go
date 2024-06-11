@@ -26,7 +26,8 @@ import (
 	flaglog "github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"gopkg.in/alecthomas/kingpin.v2"
+	kingpin "github.com/alecthomas/kingpin/v2"
 )
 
 // handler wraps an unfiltered http.Handler but uses a filtered handler,
