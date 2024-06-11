@@ -21,7 +21,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	log "github.com/prometheus/common/promlog/log.go"
+	log "github.com/prometheus/common/promlog/log"
 	logrus "github.com/sirupsen/logrus"
 	version_export "github.com/prometheus/client_golang/prometheus/collectors/version"
 	version "github.com/prometheus/common/version"
