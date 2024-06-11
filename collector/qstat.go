@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/promlog"
+	//"github.com/prometheus/common/promlog"
 	"github.com/eunji1002/go_pbs/qstat"
 )
 
