@@ -19,6 +19,13 @@ import (
 	_ "net/http/pprof"
 	"sort"
 
+	"bytes"
+	"fmt"
+	"runtime"
+	"runtime/debug"
+	"strings"
+	"text/template"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
@@ -110,7 +117,7 @@ func (h *handler) innerHandler(filters ...string) (http.Handler, error) {
 
 	
 	r := prometheus.NewRegistry()
-	r.MustRegister(collector.NewPBSCollector("pbspro_exporter"))
+	r.MustRegister(version.NewCollector("pbspro_exporter"))
 	if err := r.Register(nc); err != nil {
 		return nil, fmt.Errorf("couldn't register pbspro collector: %s", err)
 	}
