@@ -22,7 +22,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	promlog "github.com/prometheus/common/promlog"
+	"github.com/prometheus/common/promlog"
 	flaglog "github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/common/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
@@ -151,7 +151,7 @@ func main() {
 		).Default("40").Int()
 	)
 
-	flaglog.AddFlags(kingpin.CommandLine, promlog.DefaultConfig())
+	flaglog.AddFlags(kingpin.CommandLine)
 	kingpin.Version(version.Print("pbspro_exporter"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
