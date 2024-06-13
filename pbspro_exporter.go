@@ -27,7 +27,6 @@ import (
 	version1 "github.com/prometheus/common/version"
 	version2 "github.com/prometheus/client_golang/prometheus/collectors/version"
 	"github.com/eunji1002/pbspro_exporter/collector"
-	//"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/alecthomas/kingpin"
 )
 
