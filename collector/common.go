@@ -7,7 +7,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/siddontang/go/log"
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
+	//kingpin "gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin"
 )
 
 const (
