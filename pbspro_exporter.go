@@ -150,6 +150,10 @@ func main() {
 			"web.max-requests",
 			"Maximum number of parallel scrape requests. Use 0 to disable.",
 		).Default("40").Int()
+		pbsproURL = kingpin.Flag(
+			"collector.pbspro.url", 
+			"PBSpro Server IP Address"
+		).Default("34.64.188.40").String()
 	)
 
 	logConfig := &promlog.Config{}
