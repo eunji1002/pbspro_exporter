@@ -27,6 +27,6 @@ file_env 'EXPORT_PORT' '9107'
 
 export LD_LIBRARY_PATH=/usr/lib
 
-$EXPORTER_PATH --collector.pbspro.address="$PBS_ADDR" --web.listen-address=":$EXPORT_PORT"
+$EXPORTER_PATH --collector.pbspro.url="$PBS_ADDR" --web.listen-address=":$EXPORT_PORT"
 
 
