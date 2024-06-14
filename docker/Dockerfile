@@ -21,12 +21,13 @@ RUN set -xeuo && \
     dnf install -y expat libedit postgresql-server python3 sendmail tcl tk libical cjson-devel
 
 RUN set -xeuo && \
-    git clone https://github.com/PBSPro/pbspro.git && \
-    cd pbspro && \
+    git clone https://github.com/openpbs/openpbs.git && \
+    cd openpbs && \
     ./autogen.sh && \
     ./configure --prefix=/opt/pbspro && \
     make -j4 && \
-    make install
+    make install && \
+    /opt/pbspro/libexec/pbs_postinstall
 
 RUN set -xeuo && \
     cd $GOPATH/src/golang.org/x && \
@@ -78,9 +79,12 @@ FROM rockylinux:8.9 as running
 
 COPY --from=builder /go/src/github.com/paratera/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
 COPY --from=builder /opt/pbspro/lib/libpbs.so.0 /usr/lib/libpbs.so.0
+COPY --from=builder /etc/pbs.conf /etc/pbs.conf
+COPY --from=builder /opt/pbspro /opt/pbspro
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
+[root@new-member-instance-kr docker]#
