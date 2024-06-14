@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/siddontang/go/log"
 	"github.com/alecthomas/kingpin"
-	"github.com/eunji1002/pbspro_exporter/collector"
+	
 )
 
 const (
