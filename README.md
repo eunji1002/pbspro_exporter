@@ -18,5 +18,5 @@
 ## 3. Docker run
 
 ```bash
-# docker run --name pbspro_exporter -e PBS_ADDR=34.64.188.40 -e EXPORTER_PORT=9107 -p 9107:9107 -d localhost/pbspro_exporter:latest
+# docker run -d -p 9107:9107 pbspro_exporter
 ```
