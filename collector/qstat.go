@@ -33,7 +33,7 @@ func (c *qstatCollector) Update(ch chan<- prometheus.Metric) error {
 type qstatMetric struct {
 	name            string
 	desc            string
-	value           [5]float64
+	value           float64
 	metricType      prometheus.ValueType
 	extraLabel      []string
 	extraLabelValue []string
