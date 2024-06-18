@@ -86,5 +86,3 @@ ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-
-[root@new-member-instance-kr docker]#
