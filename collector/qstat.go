@@ -423,9 +423,6 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 }
 
 func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
-    var allMetrics []qstatMetric
-    var labelsValue []string
-
     qstat, err := qstat.NewQstat(*pbsproURL)
     if err != nil {
         log.Errorln("Create New Qstat Failed. ", err.Error())
@@ -446,102 +443,66 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
         log.Errorln("Update Node State Failed ", err.Error())
     }
 
+    labelsName := []string{"NodeName", "Mom", "Ntype", "NodeState", "RunningJobs", "ResourcesAvailableArch", "ResourcesAvailableHost", "ResourcesAvailableApplications", "ResourcesAvailablePlatform", "ResourcesAvailableSoftware", "ResourcesAvailableVnodes", "Sharing"}
+
     for _, ss := range qstat.NodeState {
-        // Clear metrics slice for each node
-        allMetrics = nil
+        desc := prometheus.NewDesc(
+            prometheus.BuildFQName(namespace, qstatCollectorSubSystem, "node_pcpus"),
+            "pbspro_exporter: Node Pcpus.",
+            labelsName,
+            nil,
+        )
+        ch <- prometheus.MustNewConstMetric(
+            desc,
+            prometheus.GaugeValue,
+            float64(ss.Pcpus),
+            ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost,
+            ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing,
+        )
 
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_pcpus",
-            desc:       "pbspro_exporter: Node Pcpus.",
-            value:      float64(ss.Pcpus),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_available_mem",
-            desc:       "pbspro_exporter: Node Resources Available Mem",
-            value:      float64(ss.ResourcesAvailableMem),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_available_ncpus",
-            desc:       "pbspro_exporter: Node Resources Available Ncpus.",
-            value:      float64(ss.ResourcesAvailableNcpus),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_accelerator_memory",
-            desc:       "pbspro_exporter: Node Resources Assigned Accelerator Memory.",
-            value:      float64(ss.ResourcesAssignedAcceleratorMemory),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_hbmem",
-            desc:       "pbspro_exporter: Node Resources Assigned HBmem.",
-            value:      float64(ss.ResourcesAssignedHbmem),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_mem",
-            desc:       "pbspro_exporter: Node Resources Assigned Mem.",
-            value:      float64(ss.ResourcesAssignedMem),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_naccelerators",
-            desc:       "pbspro_exporter: Node Resources Assigned Naccelerators.",
-            value:      float64(ss.ResourcesAssignedNaccelerators),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_ncpus",
-            desc:       "pbspro_exporter: Node Resources Assigned Ncpus.",
-            value:      float64(ss.ResourcesAssignedNcpus),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resources_assigned_vmem",
-            desc:       "pbspro_exporter: Node Resources Assigned Vmem.",
-            value:      float64(ss.ResourcesAssignedVmem),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_resv_enable",
-            desc:       "pbspro_exporter: Node Resv Enable. 1 is True",
-            value:      float64(ss.ResvEnable),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_last_change_time",
-            desc:       "pbspro_exporter: Node Last Change Time",
-            value:      float64(ss.LastStateChangeTime),
-            metricType: prometheus.GaugeValue,
-        })
-        allMetrics = append(allMetrics, qstatMetric{
-            name:       "node_last_used_time",
-            desc:       "pbspro_exporter: Node Last Used Time",
-            value:      float64(ss.LastUsedTime),
-            metricType: prometheus.GaugeValue,
-        })
+        desc = prometheus.NewDesc(
+            prometheus.BuildFQName(namespace, qstatCollectorSubSystem, "node_resources_available_mem"),
+            "pbspro_exporter: Node Resources Available Mem.",
+            labelsName,
+            nil,
+        )
+        ch <- prometheus.MustNewConstMetric(
+            desc,
+            prometheus.GaugeValue,
+            float64(ss.ResourcesAvailableMem),
+            ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost,
+            ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing,
+        )
 
-        labelsValue = []string{ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost, ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing}
+        desc = prometheus.NewDesc(
+            prometheus.BuildFQName(namespace, qstatCollectorSubSystem, "node_resources_available_ncpus"),
+            "pbspro_exporter: Node Resources Available Ncpus.",
+            labelsName,
+            nil,
+        )
+        ch <- prometheus.MustNewConstMetric(
+            desc,
+            prometheus.GaugeValue,
+            float64(ss.ResourcesAvailableNcpus),
+            ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost,
+            ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing,
+        )
 
-        labelsName := []string{"NodeName", "Mom", "Ntype", "NodeState", "RunningJobs", "ResourcesAvailableArch", "ResourcesAvailableHost", "ResourcesAvailableApplications", "ResourcesAvailablePlatform", "ResourcesAvailableSoftware", "ResourcesAvailableVnodes", "Sharing"}
-
-        for _, m := range allMetrics {
-            desc := prometheus.NewDesc(
-                prometheus.BuildFQName(namespace, qstatCollectorSubSystem, m.name),
-                m.desc,
-                labelsName,
-                nil,
-            )
-
-            ch <- prometheus.MustNewConstMetric(
-                desc,
-                m.metricType,
-                m.value,
-                labelsValue...,
-            )
-        }
+        // Add more metrics here as needed for other attributes
+        // Example:
+        // desc = prometheus.NewDesc(
+        //     prometheus.BuildFQName(namespace, qstatCollectorSubSystem, "other_metric_name"),
+        //     "Description of the metric.",
+        //     labelsName,
+        //     nil,
+        // )
+        // ch <- prometheus.MustNewConstMetric(
+        //     desc,
+        //     prometheus.GaugeValue,
+        //     float64(ss.OtherMetricValue),
+        //     ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost,
+        //     ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing,
+        // )
     }
 }
 
