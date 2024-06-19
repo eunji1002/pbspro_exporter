@@ -451,7 +451,7 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 			{
 				name:       "node_state",
 				desc:       "pbspro_exporter: Node state.",
-				value:      float64(ss.State),
+				value:      float64(ss.NodeState),
 				metricType: prometheus.GaugeValue,
 			},
 			{
