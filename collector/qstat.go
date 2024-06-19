@@ -549,9 +549,6 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 }
 
 
-
-
-
 func (c *qstatCollector) updateQstatJobs(ch chan<- prometheus.Metric) {
 
 	var allMetrics []qstatMetric
