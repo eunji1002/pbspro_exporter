@@ -423,14 +423,10 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 }
 
 func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
-
-	var allMetrics []qstatMetric
-	//var metrics []qstatMetric
-	var labelsValue []string
-
 	qstat, err := qstat.NewQstat(*pbsproURL)
 	if err != nil {
 		log.Errorln("Create New Qstat Failed. ", err.Error())
+		return
 	}
 
 	qstat.SetAttribs(nil)
@@ -440,16 +436,18 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 	err = qstat.ConnectPBS()
 	if err != nil {
 		log.Fatalln("Connect PBS Server Failed. ", err.Error())
+		return
 	}
 	defer qstat.DisconnectPBS()
 
 	err = qstat.PbsNodeState()
 	if err != nil {
 		log.Errorln("Update Node State Failed ", err.Error())
+		return
 	}
 
 	for _, ss := range qstat.NodeState {
-		allMetrics = []qstatMetric{
+		allMetrics := []qstatMetric{
 			{
 				name:       "node_pcpus",
 				desc:       "pbspro_exporter: Node Pcpus.",
@@ -457,7 +455,6 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 				metricType: prometheus.GaugeValue,
 			},
 			{
-
 				name:       "node_resources_available_mem",
 				desc:       "pbspro_exporter: Node Resources Available Mem",
 				value:      float64(ss.ResourcesAvailableMem),
@@ -524,29 +521,55 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 				metricType: prometheus.GaugeValue,
 			},
 		}
-		labelsValue = []string{ss.NodeName, ss.Mom, ss.Ntype, ss.State, ss.Jobs, ss.ResourcesAvailableArch, ss.ResourcesAvailableHost, ss.ResourcesAvailableApplications, ss.ResourcesAvailablePlatform, ss.ResourcesAvailableSoftware, ss.ResourcesAvailableVnodes, ss.Sharing}
+
+		labelsValue := []string{
+			ss.NodeName,
+			ss.Mom,
+			ss.Ntype,
+			ss.State,
+			ss.Jobs,
+			ss.ResourcesAvailableArch,
+			ss.ResourcesAvailableHost,
+			ss.ResourcesAvailableApplications,
+			ss.ResourcesAvailablePlatform,
+			ss.ResourcesAvailableSoftware,
+			ss.ResourcesAvailableVnodes,
+			ss.Sharing,
+		}
+
+		for _, m := range allMetrics {
+			labelsName := []string{
+				"NodeName",
+				"Mom",
+				"Ntype",
+				"NodeState",
+				"RunningJobs",
+				"ResourcesAvailableArch",
+				"ResourcesAvailableHost",
+				"ResourcesAvailableApplications",
+				"ResourcesAvailablePlatform",
+				"ResourcesAvailableSoftware",
+				"ResourcesAvailableVnodes",
+				"Sharing",
+			}
+
+			desc := prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, qstatCollectorSubSystem, m.name),
+				m.desc,
+				labelsName,
+				nil,
+			)
+
+			ch <- prometheus.MustNewConstMetric(
+				desc,
+				m.metricType,
+				m.value,
+				labelsValue...,
+			)
+		}
 	}
-
-	for _, m := range allMetrics {
-
-		labelsName := []string{"NodeName", "Mom", "Ntype", "NodeState", "RunningJobs", "ResourcesAvailableArch", "ResourcesAvailableHost", "ResourcesAvailableApplications", "ResourcesAvailablePlatform", "ResourcesAvailableSoftware", "ResourcesAvailableVnodes", "Sharing"}
-
-		desc := prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, qstatCollectorSubSystem, m.name),
-			m.desc,
-			labelsName,
-			nil,
-		)
-
-		ch <- prometheus.MustNewConstMetric(
-			desc,
-			m.metricType,
-			m.value,
-			labelsValue...,
-		)
-	}
-
 }
+
 
 
 func (c *qstatCollector) updateQstatJobs(ch chan<- prometheus.Metric) {
