@@ -457,12 +457,6 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 				metricType: prometheus.GaugeValue,
 			},
 			{
-				name:       "node_pcpus",
-				desc:       "pbspro_exporter: Node Pcpus.",
-				value:      float64(ss.Pcpus),
-				metricType: prometheus.GaugeValue,
-			},
-			{
 
 				name:       "node_resources_available_mem",
 				desc:       "pbspro_exporter: Node Resources Available Mem",
