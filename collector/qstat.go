@@ -451,9 +451,9 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 	for _, ss := range qstat.NodeState {
 		allMetrics = []qstatMetric{
 			{
-				name:       "node_state",
-				desc:       "pbspro_exporter: node state.",
-				value:      float64(ss.NodeState),
+				name:       "node_pcpus",
+				desc:       "pbspro_exporter: Node Pcpus.",
+				value:      float64(ss.Pcpus),
 				metricType: prometheus.GaugeValue,
 			},
 			{
