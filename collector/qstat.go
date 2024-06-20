@@ -422,6 +422,20 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 
 }
 
+func stateToValue(state string) float64 {
+	switch state {
+	case "free":
+		return 1
+	case "busy":
+		return 2
+	case "down":
+		return 0
+	default:
+		return 3 // unknown or any other state
+	}
+}
+
+
 func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 	qstat, err := qstat.NewQstat(*pbsproURL)
 	if err != nil {
@@ -448,6 +462,12 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 
 	for _, ss := range qstat.NodeState {
 		allMetrics := []qstatMetric{
+			{
+				name:       "node_state",
+				desc:       "pbspro_exporter: Node state. unknown, down = 0, free = 1, busy = 2",
+				value:      stateToValue(ss.State),
+				metricType: prometheus.GaugeValue,
+			},
 			{
 				name:       "node_pcpus",
 				desc:       "pbspro_exporter: Node Pcpus.",
