@@ -431,7 +431,7 @@ func stateToValue(state string) float64 {
 	case "down":
 		return 0
 	default:
-		return 3 // unknown or any other state
+		return 3 // unknown 
 	}
 }
 
@@ -464,7 +464,7 @@ func (c *qstatCollector) updateQstatNode(ch chan<- prometheus.Metric) {
 		allMetrics := []qstatMetric{
 			{
 				name:       "node_state",
-				desc:       "pbspro_exporter: Node state. unknown, down = 0, free = 1, busy = 2",
+				desc:       "pbspro_exporter: Node state. down = 0, free = 1, busy = 2, unknow-state = 3",
 				value:      stateToValue(ss.State),
 				metricType: prometheus.GaugeValue,
 			},
