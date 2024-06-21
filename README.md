@@ -13,6 +13,8 @@
 ```bash
 # cd pbspro_exporter/docker
 # docker build -t pbspro_exporter:latest .
+
+# docker run --name pbspro_exporter -e PBS_ADDR=주소 -e EXPORTER_PORT=9107 -d pbspro_exporter:latest
 ```
 
 ## 3. Docker run
