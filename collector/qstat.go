@@ -430,8 +430,10 @@ func stateToValue(state string) float64 {
 		return 2
 	case "down":
 		return 0
+	case "offline":
+		return 3 
 	default:
-		return 3 // unknown 
+		return 4
 	}
 }
 
