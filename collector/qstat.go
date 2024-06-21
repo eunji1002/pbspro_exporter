@@ -426,7 +426,7 @@ func stateToValue(state string) float64 {
 	switch state {
 	case "free":
 		return 1
-	case "busy":
+	case "job-busy":
 		return 2
 	case "down":
 		return 0
