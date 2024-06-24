@@ -76,7 +76,8 @@ RUN set -xeuo && \
     cd $GOPATH/src/github.com/paratera && \
     wget https://github.com/eunji1002/pbspro_exporter/archive/refs/heads/main.zip && \
     unzip main.zip && \
-    mv pbspro_exporter-main pbspro_exporter && \
+    mv pbspro_exporter-main eun_pbspro_exporter && \
+    mv eun_pbspro_exporter pbspro_exporter && \
     cd pbspro_exporter && \
     go build
 
