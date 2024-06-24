@@ -82,7 +82,7 @@ RUN set -xeuo && \
 
 FROM centos:7
 
-COPY /go/src/github.com/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
+COPY /go/src/github.com/paratera/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
 COPY /opt/pbspro/lib/libpbs.so.0 /usr/lib/libpbs.so.0
 COPY /etc/pbs.conf /etc/pbs.conf
 COPY /opt/pbspro /opt/pbspro
