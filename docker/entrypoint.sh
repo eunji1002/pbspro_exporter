@@ -22,7 +22,7 @@ file_env() {
 	unset "$fileVar"
 }
 
-file_env 'PBS_ADDR' '34.64.188.40'
+file_env 'PBS_ADDR' '10.23.10.9'
 file_env 'EXPORT_PORT' '9107'
 
 export LD_LIBRARY_PATH=/usr/lib
