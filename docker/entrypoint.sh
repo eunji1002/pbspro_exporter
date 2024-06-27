@@ -23,7 +23,7 @@ file_env() {
 }
 
 file_env 'PBS_ADDR' '10.23.10.9'
-file_env 'EXPORT_PORT' '9107'
+file_env 'EXPORT_PORT' '5000'
 
 export LD_LIBRARY_PATH=/usr/lib
 
