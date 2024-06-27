@@ -83,12 +83,10 @@ RUN set -xeuo && \
 
 FROM centos:7 as running
 
-COPY  /etc/pbs.conf /etc/pbs.conf
-COPY  /opt/pbs /opt/pbspro
 COPY --from=builder /go/src/github.com/paratera/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
 COPY --from=builder /opt/pbspro/lib/libpbs.so.0 /usr/lib/libpbs.so.0
-COPY --from=builder /etc/pbs.conf /etc/pbs.conf
-COPY --from=builder /opt/pbspro /opt/pbspro
+COPY  /etc/pbs.conf /etc/pbs.conf
+COPY  /opt/pbs /opt/pbspro
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
