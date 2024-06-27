@@ -83,10 +83,11 @@ RUN set -xeuo && \
 
 FROM centos:7 as running
 
+#copy 할때 현재 경로를 기준으로 함
 COPY --from=builder /go/src/github.com/paratera/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
 COPY --from=builder /opt/pbspro/lib/libpbs.so.0 /usr/lib/libpbs.so.0
 COPY  /etc/pbs.conf /etc/pbs.conf
-COPY  /opt/pbs /opt/pbspro
+COPY  /opt/pbs /opt/pbs
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
