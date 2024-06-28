@@ -298,10 +298,6 @@ func (c *qstatCollector) updateQstatServer(ch chan<- prometheus.Metric) {
 
 func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 
-	var allMetrics []qstatMetric
-	//var metrics []qstatMetric
-	var labelsValue []string
-
 	qstat, err := qstat.NewQstat(*pbsproURL)
 	if err != nil {
 		log.Errorln("Create New Qstat Failed. ", err.Error())
@@ -323,7 +319,7 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 	}
 
 	for _, ss := range qstat.QueueState {
-		allMetrics = []qstatMetric{
+		allMetrics := []qstatMetric{
 			{
 				name:       "queue_total_jobs",
 				desc:       "pbspro_exporter: Queue Total Jobs.",
@@ -331,7 +327,6 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 				metricType: prometheus.GaugeValue,
 			},
 			{
-
 				name:       "queue_transit_state_count",
 				desc:       "pbspro_exporter: Queue Transit State Count.",
 				value:      float64(ss.StateCountTransit),
@@ -398,29 +393,28 @@ func (c *qstatCollector) updateQstatQueue(ch chan<- prometheus.Metric) {
 				metricType: prometheus.GaugeValue,
 			},
 		}
-		labelsValue = []string{ss.QueueName, ss.QueueType}
-	}
-
-	for _, m := range allMetrics {
+		labelsValue := []string{ss.QueueName, ss.QueueType}
 
 		labelsName := []string{"QueueName", "QueueType"}
 
-		desc := prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, qstatCollectorSubSystem, m.name),
-			m.desc,
-			labelsName,
-			nil,
-		)
+		for _, m := range allMetrics {
+			desc := prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, qstatCollectorSubSystem, m.name),
+				m.desc,
+				labelsName,
+				nil,
+			)
 
-		ch <- prometheus.MustNewConstMetric(
-			desc,
-			m.metricType,
-			m.value,
-			labelsValue...,
-		)
+			ch <- prometheus.MustNewConstMetric(
+				desc,
+				m.metricType,
+				m.value,
+				labelsValue...,
+			)
+		}
 	}
-
 }
+
 
 func stateToValue(state string) float64 {
 	switch state {
