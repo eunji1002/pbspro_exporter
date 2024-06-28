@@ -28,7 +28,9 @@ RUN set -xeuo pipefail && \
     make install
 
 RUN set -xeuo pipefail && \
-    git clone https://github.com/openpbs/openpbs.git && \
+    wget https://github.com/openpbs/openpbs/archive/refs/heads/release_20_0_branch.zip && \
+    unzip release_20_0_branch.zip && \
+    mv openpbs-release_20_0_branch openpbs && \
     cd openpbs && \
     ./autogen.sh && \
     CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure --prefix=/opt/pbspro && \
