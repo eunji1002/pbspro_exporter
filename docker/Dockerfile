@@ -1,39 +1,30 @@
-FROM centos:7 as builder
+FROM rockylinux:8 as builder
 
 ENV GOROOT /usr/lib/golang
 ENV GOPATH /go
 
 WORKDIR /go
 
-RUN set -xeuo && \
+RUN  set -xeuo && \
+    #curl -o /etc/yum.repos.d/Rocky-Base.repo http://mirrors.aliyun.com/repo/Rocky-8.repo && \
+    dnf -y install golang && \
     mkdir -p $GOPATH/src/github.com/paratera && \
     mkdir -p $GOPATH/src/golang.org/x
 
 RUN set -xeuo && \
-    yum install -y epel-release && \
-    yum install -y golang && \
-    yum install -y centos-release-scl && \
-    yum install -y devtoolset-9-gcc devtoolset-9-gcc-c++ && \
-    yum install -y wget which tar openssh-server openssh-clients openssl openssl-devel && \
-    yum install -y gcc-c++ make rpm-build libtool hwloc-devel libX11-devel libXt-devel libedit-devel libical-devel ncurses-devel perl postgresql-devel python3-devel tcl-devel tk-devel swig expat-devel libXext libXft autoconf automake && \
-    yum install -y expat libedit postgresql-server python3 sendmail tcl tk libical git json-c json-c-devel cmake3 && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf install -y 'dnf-command(config-manager)' && \
+    dnf install -y epel-release && \
+    dnf config-manager --set-enabled powertools && \
+    dnf groupinstall "Development Tools" -y && \
+    dnf install -y sudo tar wget openssh-server openssh-clients openssl openssl-devel && \
+    dnf install -y gcc make rpm-build libtool hwloc-devel libX11-devel libXt-devel libedit-devel libical-devel ncurses-devel perl postgresql-devel python3-devel tcl-devel tk-devel swig expat-devel libXext libXft autoconf automake && \
+    dnf install -y expat libedit postgresql-server python3 sendmail tcl tk libical cjson-devel
 
-RUN set -xeuo pipefail && \
-    git clone https://github.com/DaveGamble/cJSON.git && \
-    cd cJSON && \
-    cmake3 . && \
-    make && \
-    make install
-
-RUN set -xeuo pipefail && \
-    wget https://github.com/openpbs/openpbs/archive/refs/heads/release_20_0_branch.zip && \
-    unzip release_20_0_branch.zip && \
-    mv openpbs-release_20_0_branch openpbs && \
+RUN set -xeuo && \
+    git clone https://github.com/openpbs/openpbs.git && \
     cd openpbs && \
     ./autogen.sh && \
-    CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure --prefix=/opt/pbspro && \
+    ./configure --prefix=/opt/pbspro && \
     make -j4 && \
     make install && \
     /opt/pbspro/libexec/pbs_postinstall
@@ -45,7 +36,7 @@ RUN set -xeuo && \
     git clone https://github.com/golang/sys.git && \
     git clone https://github.com/golang/crypto.git && \
     go env -w GO111MODULE=off && \
-    go get github.com/alecthomas/kingpin && \
+    go get github.com/alecthomas/kingpin &&\
     go get github.com/alecthomas/template && \
     go get github.com/alecthomas/template/parse && \
     go get github.com/alecthomas/units && \
@@ -73,17 +64,18 @@ RUN set -xeuo && \
     go get github.com/sirupsen/logrus && \
     go get github.com/eunji1002/pbspro_exporter/collector
 
+
 RUN set -xeuo && \
     mkdir -p $GOPATH/src/github.com/paratera && \
     cd $GOPATH/src/github.com/paratera && \
     wget https://github.com/eunji1002/pbspro_exporter/archive/refs/heads/main.zip && \
     unzip main.zip && \
-    mv pbspro_exporter-main eun_pbspro_exporter && \
-    mv eun_pbspro_exporter pbspro_exporter && \
+    mv pbspro_exporter-main pbspro_exporter && \
     cd pbspro_exporter && \
     go build
 
-FROM centos:7 as running
+
+FROM rockylinux:8 as running
 
 COPY --from=builder /go/src/github.com/paratera/pbspro_exporter/pbspro_exporter /usr/bin/pbspro_exporter
 COPY --from=builder /opt/pbspro/lib/libpbs.so.0 /usr/lib/libpbs.so.0
@@ -94,4 +86,3 @@ ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-
