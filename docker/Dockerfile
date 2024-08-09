@@ -20,11 +20,13 @@ RUN set -xeuo && \
     dnf install -y gcc make rpm-build libtool hwloc-devel libX11-devel libXt-devel libedit-devel libical-devel ncurses-devel perl postgresql-devel python3-devel tcl-devel tk-devel swig expat-devel libXext libXft autoconf automake && \
     dnf install -y expat libedit postgresql-server python3 sendmail tcl tk libical cjson-devel
 
-RUN set -xeuo && \
-    git clone https://github.com/openpbs/openpbs.git && \
+RUN set -xeuo pipefail && \
+    wget https://github.com/openpbs/openpbs/archive/refs/tags/v22.05.11.zip && \
+    unzip v22.05.11.zip && \
+    mv openpbs-22.05.11 openpbs && \
     cd openpbs && \
     ./autogen.sh && \
-    ./configure --prefix=/opt/pbspro && \
+    CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure --prefix=/opt/pbspro && \
     make -j4 && \
     make install && \
     /opt/pbspro/libexec/pbs_postinstall
